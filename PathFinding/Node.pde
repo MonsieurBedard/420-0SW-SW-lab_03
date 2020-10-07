@@ -40,6 +40,10 @@ class Node extends Cell {
     return G;
   }
   
+  void setG(int g) {
+    G = g;
+  }
+  
   void setH (int h) {
     this.H = h;
   }
@@ -77,7 +81,7 @@ class Node extends Cell {
   }
   
   String toString() {
-    return "( " + getF() + ", " + getG() + ", " + getH() + ")"; 
+    return "( i: " + i + " j:" + j + " | F:" + getF() + ", G:" + getG() + ", H:" + getH() + ")"; 
   }
   
   
@@ -85,5 +89,4 @@ class Node extends Cell {
     isWalkable =false;
     fillColor = bgColor;
   }
-
 }

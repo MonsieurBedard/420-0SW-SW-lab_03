@@ -90,7 +90,7 @@ class NodeMap extends Matrix {
     for (int j = 0; j < rows; j++) {
       for (int i = 0; i < cols; i++) {
         Node current = (Node)cells.get(j).get(i); 
-        current.setH( calculateH(current));
+        current.setH(calculateH(current));
       }
     }
   }
@@ -178,18 +178,62 @@ class NodeMap extends Matrix {
       return;
     }
     
-    // TODO : Complétez ce code
+    ArrayList<Node> openSet = new ArrayList<Node>();
+    openSet.add(start);
     
+    ArrayList<Node> closeSet = new ArrayList<Node>();
+    
+    Node current = null;
+    
+    while (!openSet.isEmpty()) {
+      current = getLowestCost(openSet);
+      if (current.isEnd) {
+        break;
+      }
+      
+      openSet.remove(current);
+      closeSet.add(current);
+      
+      for (Node neighbor : current.neighbours) {
+        int tentative_gScore = current.getG() + calculateCost(current, neighbor);
+        
+        if (tentative_gScore < neighbor.getG() || !openSet.contains(neighbor)) {
+          if (!closeSet.contains(neighbor)) {
+            neighbor.setParent(current);
+            neighbor.setG(tentative_gScore);
+            if (!openSet.contains(neighbor)) {
+              openSet.add(neighbor);
+            }
+          }
+        }
+      }
+    }
+        
     // Appelez generatePath si le chemin est t
     // TODO : Complétez ce code
-    
+    generatePath(current);
   }
   
   /*
     Permet de générer le chemin une fois trouvée
   */
-  void generatePath () {
+  void generatePath (Node currentNode) {
     // TODO : Complétez ce code
+    ArrayList<Node> path = new ArrayList<Node>();
+    path.add(currentNode);
+    
+    while (!currentNode.isStart) {
+      path.add(0, currentNode);
+      currentNode = currentNode.getParent();
+    }
+    
+    for (int i = 0; i < path.size(); i++) {
+      path.get(i).setFillColor(color(255,0,0));
+    }
+    
+    end.setFillColor(color(0,152,255));
+    
+    System.out.println("Hello there");
   }
   
   /**
@@ -199,10 +243,16 @@ class NodeMap extends Matrix {
   private Node getLowestCost(ArrayList<Node> openList) {
     // TODO : Complétez ce code
     
-    return null;
+    Node cheapestNode = openList.get(0);
+    for (int i = 0; i < openList.size(); i++) {
+      if (cheapestNode.getF() > openList.get(i).getF()) {
+        cheapestNode = openList.get(i);
+        System.out.println(cheapestNode.getF());
+      }
+    }
+    
+    return cheapestNode;
   }
-  
-
   
  /**
   * Calcule le coût de déplacement entre deux noeuds
@@ -212,8 +262,10 @@ class NodeMap extends Matrix {
   */
   private int calculateCost(Cell nodeA, Cell nodeB) {
     // TODO : Complétez ce code
+    int iDiff = abs(nodeA.i - nodeB.i);
+    int jDiff = abs(nodeA.j - nodeB.j);
     
-    return 0;
+    return iDiff * 10 + jDiff * 10;
   }
   
   /**
@@ -223,7 +275,10 @@ class NodeMap extends Matrix {
   */
   private int calculateH(Cell node) {
     // TODO : Complétez ce code
-    return 0;
+    int iDiff = abs(end.i - node.i);
+    int jDiff = abs(end.j - node.j);
+    
+    return iDiff * 10 + jDiff * 10;
   }
   
   String toStringFGH() {

@@ -43,15 +43,28 @@ void initMap () {
   
   worldMap.setBaseColor(baseColor);
   
-  worldMap.setStartCell(mapCols / 2 - 5, 3);
-  worldMap.setEndCell(mapCols - 1, mapRows - 1);
+  int x = (int)random(mapCols);
+  int y = (int)random(mapRows);
+  worldMap.setStartCell(x, y);
+  
+  x = (int)random(mapCols);
+  y = (int)random(mapRows);  
+  worldMap.setEndCell(x, y);
   
   worldMap.updateHs();
   
-  worldMap.makeWall (mapCols / 2, 0, 15, true);
-  worldMap.makeWall (mapCols / 2 - 9, 10, 10, false);
+  x = (int)random(10, mapCols - 10);
+  y = (int)random(10, mapRows - 10); 
+  worldMap.makeWall(x, 0, mapRows - 10, true);
+  
+  x = (int)random(10, mapCols - 10);
+  y = (int)random(10, mapRows - 10);
+  worldMap.makeWall(x, y, 50, false);
+  
+  //worldMap.makeWall (mapCols / 2, 0, 15, true);
+  //worldMap.makeWall (mapCols / 2 - 9, 10, 10, false);
     
-  worldMap.generateNeighbourhood(); //<>//
+  worldMap.generateNeighbourhood();
       
   worldMap.findAStarPath();
 }
